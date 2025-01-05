@@ -1,13 +1,6 @@
 import { Server, Socket } from 'socket.io';
-import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { JWTUtil } from '../jwt-utils';
 import { friendRepository } from '../../v1/db/repositories/friend.repo';
-
-interface FileData {
-    username: string;
-    file_url: string;
-    access_token: string;
-}
 
 interface ConnectData {
     access_token: string;
@@ -29,13 +22,19 @@ export class SocketManager {
         this.initialize();
     }
 
-    public static getInstance(io?: Server): SocketManager {
-        if (!SocketManager.instance) {
-            if (!io) {
-                throw new Error('Server instance is required for initialization');
-            }
-            SocketManager.instance = new SocketManager(io);
+    public static initialize(io: Server): void {
+        if(SocketManager.instance) {
+            throw new Error('SocketManager instance already exists');
         }
+
+        this.instance = new SocketManager(io);
+    }
+
+    public static getInstance(): SocketManager {
+        if(!SocketManager.instance) {
+            throw new Error('SocketManager instance is not initialized');
+        }
+
         return SocketManager.instance;
     }
 
@@ -116,46 +115,6 @@ export class SocketManager {
                     }
                 });
             })
-
-
-            // // 특정 사용자의 파일 URL 조회
-            // socket.on('get_file_url', (data: ConnectData) => {
-
-            //     const { access_token } = data;
-
-            //     let username = null;
-        
-            //     JWTUtil.verifyAccessToken(access_token, (err, decoded) => {
-            //       if(err) {
-            //            socket.emit('connect_response', {
-            //             success: false,
-            //             message: "Invalid token"
-            //            });
-            //            return;
-            //       }
-
-            //       username = decoded?.username;
-            //      }
-            //     );
-
-            //     if(!username) {
-            //         socket.emit('connect_response', {
-            //             success: false,
-            //             message: "Invalid token"
-            //         });
-            //         return;
-            //     }
-
-
-            //     const file_url = this.userFileMap.get(username);
-            //     socket.emit('file_url_response', {
-            //         success: true,
-            //         data: {
-            //             username,
-            //             file_url: file_url || null
-            //         }
-            //     });
-            // });
 
             socket.on('disconnect', async () => {
                 const username = this.userSocketIdMap.get(socket.id);

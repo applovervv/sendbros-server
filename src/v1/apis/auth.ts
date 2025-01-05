@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { createGoogleStyleResponse } from '../../lib/formatter';
-
 import {
     errorHandler,
 } from '../utils/error-handler';

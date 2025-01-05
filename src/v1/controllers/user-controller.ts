@@ -69,7 +69,7 @@ export class UserController {
               return createGoogleStyleResponse(req, res, StatusCodes.NOT_FOUND, {}, "User not found");
           }
 
-          console.log(user);
+        //   console.log(user);
           const fileReceiveSettings = await fileRepository.getFileReceiveSettings(user.id!);
           
           
