@@ -1,0 +1,48 @@
+datasource:
+  strategy: RANGE
+
+  shards:
+    - shard_no: 0
+      username: postgres
+      password: 123456
+      host: localhost
+      port: 5432
+      database: sendbros
+
+      rule:
+        range_min: 0
+        range_max: 1000
+
+    - shard_no: 2
+      username: postgres
+      password: 123456
+      host: localhost
+      port: 5432
+      database: shard_3
+
+      rule:
+        range_min: 5001
+        range_max: 9223372036854775807
+
+    - shard_no: 1
+      username: postgres
+      password: 123456
+      host: localhost
+      port: 5432
+      database: shard_2
+
+      rule:
+        range_min: 1001
+        range_max: 5000
+
+        # range_min < 1000 < range_max
+# sharding:
+#   friend:
+#     strategy: RANGE
+#     rules:
+#       - shard_no: 0
+#         range_min: 0
+#         range_max: 1000
+#       - shard_no: 1
+#         range_min: 1001
+#         range_max: 9223372036854775807
