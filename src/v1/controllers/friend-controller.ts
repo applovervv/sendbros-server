@@ -5,6 +5,7 @@ import { createGoogleStyleResponse } from "../../lib/formatter";
 import { userRepository } from "../db/repositories";
 import { SocketManager } from "../../lib/socket-manager";
 import { FriendWithOnlineStatus } from "../db/models/friend.model";
+import { GetFriendRequestsResponse, GetFriendsResponse, GetSendFriendRequestResponse, GetSentFriendRequestsResponse } from "../responses";
 
 export class FriendController {
     // 친구 목록 조회
@@ -28,7 +29,7 @@ export class FriendController {
          
         }));
 
-        return createGoogleStyleResponse(req, res, StatusCodes.OK, {
+        return createGoogleStyleResponse<GetFriendsResponse>(req, res, StatusCodes.OK, {
             friends: friendsWithOnlineStatus,
             pagination: {
                 offset: Number(offset),
@@ -42,8 +43,8 @@ export class FriendController {
         const { userId } = req.accessTokenPayload!;
         const requests = await friendRepository.getFriendRequests(userId);
 
-        return createGoogleStyleResponse(req, res, StatusCodes.OK, {
-            requests
+        return createGoogleStyleResponse<GetFriendRequestsResponse>(req, res, StatusCodes.OK, {
+            requests: requests
         }, null);
     }
 
@@ -52,8 +53,8 @@ export class FriendController {
         const { userId } = req.accessTokenPayload!;
         const sentRequests = await friendRepository.getSentFriendRequests(userId);
 
-        return createGoogleStyleResponse(req, res, StatusCodes.OK, {
-            sentRequests
+        return createGoogleStyleResponse<GetSentFriendRequestsResponse>(req, res, StatusCodes.OK, {
+            sentRequests: sentRequests
         }, null);
     }
 
@@ -87,7 +88,6 @@ export class FriendController {
 
         const friendship = await friendRepository.sendFriendRequest(userId, friendId);
 
-       
         const socketIds = SocketManager.getInstance().getSocketIds(friend.username);
 
         if(socketIds && socketIds.length > 0) {
@@ -102,8 +102,8 @@ export class FriendController {
            }
         }
 
-        return createGoogleStyleResponse(req, res, StatusCodes.OK, {
-            friendship
+        return createGoogleStyleResponse<GetSendFriendRequestResponse>(req, res, StatusCodes.OK, {
+            friendship: friendship
         }, null);
     }
 
@@ -175,7 +175,7 @@ export class FriendController {
         if(socketIds && socketIds.length > 0) {
             for(const socketId of socketIds) {
                 SocketManager.getInstance().getIo().to(socketId).emit('friend_deleted', {
-                    deletedFriendId: friendId
+                    deletedFriendId: userId
                 });
             }
         }

@@ -22,7 +22,11 @@ const httpServer = createServer(app);
 // Proxy configuration : false
 app.set('trust proxy', false);
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' ? process.env.CORS_ORIGIN || process.env.ENDPOINT_URL : '*',
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 // 로그 설정
 configureMorganHttpLogger(app);
 

@@ -6,6 +6,7 @@ import { router as fileRouter } from './apis/file';
 import { router as tokenRouter } from './apis/token';
 import { router as friendRouter } from './apis/friend';
 import { createGoogleStyleResponse } from '../lib/formatter';
+import { StatusCodes } from 'http-status-codes';
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router.use('/token', tokenRouter); // TODO: sign up using phone
 // 전역 에러 핸들러
 router.use(async (err: Error, req: Request, res: Response, next: NextFunction): Promise<void> => {
   console.error(err.stack);
-  createGoogleStyleResponse(req, res, 500, {}, 'Something went wrong..');
+  createGoogleStyleResponse(req, res, StatusCodes.INTERNAL_SERVER_ERROR, {}, 'Something went wrong..');
   next(err);
 });
 

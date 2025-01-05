@@ -10,11 +10,11 @@ interface GoogleStyleResult {
   };
 }
 
-function createGoogleStyleResponse(
+function createGoogleStyleResponse<T>(
   req: Request, 
   res: Response, 
   status: number, 
-  data: any, 
+  data: T, 
   errorMsg?: string | null
 ): Response {
   const result: GoogleStyleResult = {

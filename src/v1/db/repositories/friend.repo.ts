@@ -1,7 +1,7 @@
 import SQL from "@nearform/sql";
 import { pool } from "../../../lib/dbconn";
 import { BaseRepository } from "./base.repo";
-import { Friend } from "../models/friend.model";
+import { Friend, FriendRequest } from "../models/friend.model";
 
 export class FriendRepository extends BaseRepository {
 

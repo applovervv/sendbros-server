@@ -65,17 +65,20 @@ export class FileController {
             return createGoogleStyleResponse(req, res, StatusCodes.NOT_FOUND, null, "User is not online");
         } 
 
+        const expireAt = new Date(Date.now() + GlobalStorageConfig.FILE_DELETE_TIME);
+
         for(const socketId of socketIds) {
             SocketManager.getInstance().getIo().to(socketId).emit('file_data_received', {
                 sender: usernameSender,
                 receiver: username,
                 file_url: fileUrl,
-                expire_at: new Date(Date.now() + GlobalStorageConfig.FILE_DELETE_TIME),
+                expire_at: expireAt,
             });
         }
 
         return createGoogleStyleResponse(req, res, StatusCodes.OK, {
             fileUrl,
+            expire_at: expireAt,
         }, "파일이 성공적으로 업로드되었습니다.");
     }
     

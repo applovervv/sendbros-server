@@ -10,6 +10,7 @@ export interface Friend {
     username: string;
 }
 
+export interface FriendRequest extends Friend {}
 
 export interface FriendWithOnlineStatus extends Friend {
     isOnline: boolean;

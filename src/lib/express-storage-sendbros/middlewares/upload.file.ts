@@ -8,6 +8,7 @@ export const uploadFileMiddleware = (req: Request, res: Response, next: Function
     GlobalStorageConfig.upload.single('file')(req, res, (err: any) => {
         if (err instanceof multer.MulterError) {
             if (err.code === 'LIMIT_FILE_SIZE') {
+                console.log("express-storage-sendbros: uploadFileMiddleware: err.code === 'LIMIT_FILE_SIZE'");
                 return createGoogleStyleResponse(
                     req, 
                     res, 

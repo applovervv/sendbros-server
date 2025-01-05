@@ -43,6 +43,7 @@ export class SocketManager {
             console.log('클라이언트 연결됨:', socket.id);
 
             socket.on('ready', async (data: ConnectData) => {
+                console.log("ready");
                 const { access_token } = data;
 
                 let username = null;
