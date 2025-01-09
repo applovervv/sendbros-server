@@ -40,6 +40,8 @@ export class SocketManager {
 
     private initialize(): void {
         this.io.on('connection', (socket: Socket) => {
+            //get socket ip
+           
             console.log('클라이언트 연결됨:', socket.id);
 
             socket.on('ready', async (data: ConnectData) => {
@@ -105,6 +107,12 @@ export class SocketManager {
                     }
                 }
 
+                const ipAddress = socket.handshake.address;
+                
+                 // Get real IP from Cloudflare headers
+                const clientIP = socket.handshake.headers['cf-connecting-ip'] || socket.handshake.address;
+
+                console.log('ipAddress: ', clientIP);
                 console.log('클라이언트 연결됨:', socket.id);
                 console.log('클라이언트 연결됨:', username);
 

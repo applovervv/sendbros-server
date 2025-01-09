@@ -7,10 +7,10 @@ import { JwtService } from '../../lib/jwt-service';
 export const validateAccessToken = function (req:Request, res:Response, next:NextFunction) {
     const accessToken = JwtService.extractTokenFromRequest(req)
 
-    console.log("accessToken FUC: ", accessToken);
+    // console.log("accessToken FUC: ", accessToken);
 
     if(accessToken === undefined) {
-        console.log("accessToken UNDEFINED: ", accessToken);
+        // console.log("accessToken UNDEFINED: ", accessToken);
          createGoogleStyleResponse(req, res, StatusCodes.UNAUTHORIZED, {}, "invalid.access.token");
          return;
     }
